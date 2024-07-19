@@ -88,6 +88,33 @@ void *bioProcessBackgroundJobs(void *arg);
  * main thread. */
 #define REDIS_THREAD_STACK_SIZE (1024*1024*4)
 
+
+#ifdef OHOS
+/*
+ohos-sdk doesn't support pthread_cancel, pthread_setcancelstate, pthread_setcanceltype, pthread_cancel
+*/
+
+/* Set cancellation state of current thread to TYPE, returning the old
+   type in *OLDTYPE if OLDTYPE is not NULL.  */
+int pthread_setcanceltype (int __type, int *__oldtype)
+{
+    return 0;
+}
+
+/* Cancel THREAD immediately or at the next possibility.  */
+int pthread_cancel (pthread_t __th)
+{
+    return 0;
+
+}
+int pthread_setcancelstate (int __state, int *__oldstate)
+{
+    return 0;
+}
+
+#endif
+
+
 /* Initialize the background system, spawning the thread. */
 void bioInit(void) {
     pthread_attr_t attr;
